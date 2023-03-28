@@ -4,44 +4,55 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Itim&family=Noto+Sans+KR:wght@400;700&family=Vast+Shadow&display=swap" rel="stylesheet">
     <title>달력</title>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Questrial&display=swap');
 
-        body { background-color : skyblue; } 
+        body { 
+            background-color : #8093e4;
+        } 
 
-        div {
+        .body_{
             background-color : white;
-            height: auto;
+            height: 700px;
             width: 400px;
-            margin: 0px;
+            margin:0 100px;
             padding: 20px;
             margin: 0 auto;
             border-radius:5px;
             box-shadow:0px 40px 30px -20px rgba(0,0,0,0.3);
         }
-
         td {
             width: 50px;
             height: 50px;
         }
-
         .Calendar {
             text-align: center;
+            padding-bottom:10px;
+            border-bottom:2px solid #030716;
         }
-
+        .note{
+            padding:0;
+            text-align:center;
+            position: relative;
+            height:300px;
+            width:366px;
+        }
         .Calendar>thead>tr:first-child>td {
             font-family: 'Questrial', sans-serif;
             font-size: 1.1em;
             font-weight: bold;
         }
-
         .Calendar>thead>tr:last-child>td {
             font-family: 'Questrial', sans-serif;
             font-weight: 600;     
         }
-
         .Calendar>tbody>tr>td>p {
             font-family: 'Montserrat', sans-serif;
             height: 45px;
@@ -53,41 +64,123 @@
             display: block;
             text-align: center;
         }        
-
         .pastDay {
             color: lightgray;
+            cursor:pointer;
         }
-
         .today {
             background-color: #F5D042;            
             color: #fff;
             font-weight: 600;
             cursor: pointer;
         }
-
-        .futureDay {
+        .futureDay{
             background-color: #FFFFFF;
             cursor: pointer;
         }
-        .futureDay:hover{
+        .futureDay:hover,.pastDay:hover{
             background:#eee;
         }
-
-        .futureDay.choiceDay,
-        .today.choiceDay {
+        .menu{
+            margin-right:0;
+            padding-left:70px;
+        }
+        .menu i{
+            margin-right:18px;
+        }
+        .choiceDay{
             background: #0A174E;
             color: #fff;
             font-weight: 600;
             cursor: pointer;
         }
+
+        .btn_modi{
+            display: none;
+        }
+        .inpWrap,.listView{
+            width: 400px;
+            margin: 0 auto;
+        }
+        .listView{
+            margin:0 auto;
+            font-family: 'Itim', cursive;
+            font-family: 'Noto Sans KR', sans-serif;
+            margin-bottom:30px;
+        }
+        .listView ul{
+            padding-left:10px;
+        }
+        .listView ul li{
+            display: flex;
+            padding: 5px 0;
+            border-bottom:2px dashed rgb(119, 113, 113);
+        }
+        .listView ul li .list{
+            display: flex;
+            align-items: center;
+            padding-left:10px;
+        }
+        .listView ul li .icon{
+            /* 오른쪽으로 붙음 */
+            margin-left:auto;
+            background: #332a2b;
+            padding:5px 10px;
+            border-radius:5px;
+            font-size:12px;
+            display: flex;
+            gap:10px;
+        }
+        .listView ul li .icon a{
+            color:white;
+            padding-top:10px;
+        }
+        .listView .btnAllDel, .listView .btnAllComplete{
+            display:none;
+            margin-right:10px;
+        }
+        .btnAllDel{
+            left:0;
+        }
+        .item.done{
+            background: linear-gradient(rgb(75, 142, 230),rgb(211, 210, 250));
+        }
+        .btn_input{
+            margin-left:auto;
+            display: flex;
+            margin-top:-20px;
+        }
+        .todo-bottom{
+            position: absolute;
+            bottom:0;
+            height:50px;
+            margin:0 auto;
+            width:366px;
+        }
+        .btnAllDel{
+            position: absolute;
+            left:0;
+            cursor: pointer;
+        }
+        .add_icon{
+            position: absolute;
+            right:0;
+            cursor: pointer;
+            border:none;
+            background: white;
+        }
     </style>
+    <script src="https://kit.fontawesome.com/def66b134a.js" crossorigin="anonymous"></script>
 
     <script>
-        window.onload = function () { buildCalendar(); }
+        import *as counter from './todo.html';
+        window.onload = function () { 
+            buildCalendar();
+        }
 
-        let nowMonth = new Date();  // 현재 달을 페이지를 로드한 날의 달로 초기화
-        let today = new Date();     // 페이지를 로드한 날짜를 저장
-        today.setHours(0, 0, 0, 0);    // today의 시간을 초기화
+        let nowMonth = new Date();  // 현재 달
+        let today = new Date();     // 날짜를 저장
+        today.setHours(0, 0, 0, 0);    // today의 시간 초기화
 
         // 달력 생성 : 해당 달에 맞춰 테이블을 만들고, 날짜를 채워 넣는다.
         function buildCalendar() {
@@ -124,6 +217,7 @@
 
                 if (nowDay < today) {                       // 지난날인 경우
                     newDIV.className = "pastDay";
+                    newDIV.onclick = function () { choiceDate(this); }
                 }
                 else if (nowDay.getFullYear() == today.getFullYear() && nowDay.getMonth() == today.getMonth() && nowDay.getDate() == today.getDate()) { // 오늘인 경우           
                     newDIV.className = "today";
@@ -167,18 +261,22 @@
 </head>
 
 <body>
-    <div>
+    <div class="body_">
         <table class="Calendar">
             <thead>
                 <tr>
                     <td onClick="prevCalendar();" style="cursor:pointer;">&#60;</td>
-                    <td colspan="5">
+                    <td colspan="2">
                         <span id="calYear"></span>년
                         <span id="calMonth"></span>월
-                    </td>
+                    </td>                   
                     <td onClick="nextCalendar();" style="cursor:pointer;">&#62;</td>
+                    <td colspan="3"class="menu">
+                        <i class="fa-sharp fa-solid fa-magnifying-glass" style="cursor:pointer;"></i>
+                        <i class="fa-solid fa-bars" style="cursor:pointer;"></i>
+                    </td>
                 </tr>
-                <tr>
+                <tr id="week">
                     <td>일</td>
                     <td>월</td>
                     <td>화</td>
@@ -188,12 +286,110 @@
                     <td>토</td>
                 </tr>
             </thead>
-
             <tbody>
             </tbody>
         </table>
+            <div class="note">
+                <ul>
+                </ul>
+                <div class="todo-bottom">
+                    <button class="btnAllDel" onclick="allDel()">전체삭제</button>
+                    <button class="add_icon" type="button" onclick="location.href='todo.html'"><i class="fa-solid fa-circle-plus fa-2x"></i></button>
+                </div>
+            </div>
     </div>
 
-</body>
+        <script>
+            let listData = [
+                // {todo:" ex) 자바스크립트1",done:false},
+            ]
+            const numElem = document.querySelector(".num");
+            const btnMoElem = document.querySelector(".btn_modi");
+            const listElem = document.querySelector(".listView ul");
+            const btnAllElem = document.querySelector(".btnAllDel");
+            
+        function viewData(){
+            if(localStorage.length>0){
+                let localData = localStorage.getItem("todoData");
+                listData = JSON.parse(localData);
+            }
 
+            let viewList="";
+            listData.forEach(function(item,index,date){
+                console.log(item.todo);
+                // viewList+="<li"
+                //     if(item.done==true){
+                //         viewList+=" class='done' "
+                //     }
+                // viewList+=">"
+                // viewList+= item.todo
+                // viewList+="</li>"
+
+                if(item.done==true){
+                    viewList+=`<li class="item done">${item.todo}`
+                }else{
+                    viewList+=`<li class="item">${item.todo+"<br>"+" 마감 기한 : "+item.date}`
+                }
+                viewList+=`<div class="icon">
+                    <a href="javascript:void(0)" onclick="itemDel(${index})"><i class="fa-solid fa-trash-can"></i></a>
+                    <a href="javascript:void(0)" onclick="modi('${item.todo}',${index})"><i class="fa-solid fa-hammer"></i></a>
+                    <a href="javascript:void(0)" onclick="done(${index})"><i class="fa-solid fa-square-check"></i></a>
+                    </div></li>`
+            })
+
+            listElem.innerHTML = viewList;
+        }
+
+        viewData();
+
+        function itemDel(index){
+            listData.splice(index,1);
+            //localStorage
+            let valueData = JSON.stringify(listData);
+            localStorage.setItem("todoData",valueData);
+            viewData();
+        }
+
+        function done(index){
+            console.log(index)
+            // if(listData[index].done==true){
+            //     listData[index].done=false;
+            // }else{
+            //     listData[index].done=true;
+            // }
+            listData[index].done =! listData[index].done;
+            //localStorage
+            let valueData = JSON.stringify(listData);
+            localStorage.setItem("todoData",valueData);
+            viewData();
+
+        }
+
+        function modi(todo,index){
+            console.log(todo+index);
+            inpElem.value=todo;
+            numElem.value=index;
+            btnIpElem.style.display = "none";
+            btnMoElem.style.display = "inline-block";
+        }
+
+        function allDel(){
+            if ( this.host !== window.location.host ) {
+                if ( window.confirm('할 일을 전부 삭제하겠습니까?') ) {
+                    listData=[];
+                    //localStorage
+                    let valueData = JSON.stringify(listData);
+                    localStorage.setItem("todoData",valueData);
+                    viewData();
+                    btnAllElem.style.display='none';
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+    </script>
+      
+  
+</body>
 </html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
+    <title>Todo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Questrial&display=swap');
+         body { 
+            background-color : #8093e4;
+        } 
+
+        .body_{
+            background-color : white;
+            height: 700px;
+            width: 400px;
+            margin:0 100px;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius:5px;
+            box-shadow:0px 40px 30px -20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .body_ h3{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding:5px 10px 2px 10px;
+            font-size:25px;
+            font-family: 'Single Day', cursive;
+            text-shadow: 3px 4px 7px rgba(165, 145, 238, 0.8);
+            margin-bottom:10px;
+            padding-bottom:20px;
+            border-bottom:3px double #070341;
+        }
+        .x_mark{
+            position: absolute;
+            right: 30px;
+            top:30px;
+            border:none;
+            background: white;
+        }
+        input{
+            height: 40px;
+            width: 100%;
+            border:none;
+            z-index: 99999;
+            margin-bottom:10px;
+        }
+        .emoticon{
+            right:30px;
+            width:90px;
+            margin-top:7px;
+            border:none;
+            background: white;
+            cursor: pointer;
+            padding:10px;
+            float:left;
+            border-color:#070341;
+        }
+        .emoticon:hover{
+            background: rgb(227, 205, 241);
+        }
+        .icon-name{
+            padding-top:7px;
+            text-align:center;
+            display: -webkit-box;
+            overflow:hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+    </style>
+</head> 
+<body>
+    <div class="body_">
+        <h3>일정_<i class="fa-sharp fa-solid fa-pen-to-square"></i></h3>
+        <button class="x_mark"><i class="fa-solid fa-xmark fa-2x"></i></button>
+       
+        <div class="inpWrap">
+            <form class="todo-form">
+            <input type="hidden" class="num">
+            <input placeholder="일정을 입력하세요" type="text" class="inp">
+            <button class="emoticons"><i class= ></i></button>
+        </div>
+
+        <button class="emoticon">
+            <span><i class="fa-solid fa-calendar-check fa-3x"></i></span> 
+            <span class="icon-name">일정</span>
+        </button>
+        <button class="emoticon">
+            <span><i class="fa-solid fa-square-check fa-3x"></i></span> 
+            <span class="icon-name">할 일</span>
+        </button>
+        <button class="emoticon">
+            <span><i class="fa-solid fa-book fa-3x"></i></span> 
+            <span class="icon-name">일기(메모)</span>
+        </button>
+        <button class="emoticon">
+            <span><i class="fa-solid fa-flag fa-3x"></i></span> 
+            <span class="icon-name">목표</span>
+        </button>
+
+        <button class="btn_input">입력</button>
+    </div>
+
+    <script>
+
+        let listData = [
+            // {todo:" ex) 자바스크립트1",done:false},
+        ]
+
+        const inpElem = document.querySelector(".inp");
+        const DateElem = document.querySelector(".date");
+        const btnIpElem = document.querySelector(".btn_input");
+        const numElem = document.querySelector(".num");
+
+        btnIpElem.addEventListener("click", btnIp());
+         //입력
+         export function btnIp(){
+            let value = {"todo":inpElem.value,"done":false,"date":DateElem.value};
+
+            if(inpElem.value!=""){
+                listData.push(value);
+                
+                //valueData에 listData를 string 형태로 넣는다(그냥 넣으면 object data들어감)
+                let valueData = JSON.stringify(listData);
+                localStorage.setItem("todoData",valueData);
+
+                viewData();
+                inpElem.value=""
+                btnAllElem.style.display='inline-block';
+            }else{
+                alert("오늘의 할 일을 입력하세요");
+            }
+            inpElem.focus();
+         }
+
+    </script>
+</body>
+</html>

@@ -1,8 +1,26 @@
 @charset "utf-8";
 
-html,
-body {
-    height: 100%;
+html,body {
+    height: 714px;
+    width:770px;
+    margin:0 auto;
+    padding-top:30px;
+}
+
+body { 
+    background-color : #8093e4;
+} 
+
+.body_{
+    background-color : white;
+    height: 700px;
+    width: 400px;
+    margin:0 100px;
+    padding: 20px;
+    margin: 0 auto;
+    border-radius:5px;
+    box-shadow:0px 40px 30px -20px rgba(0,0,0,0.3);
+    position: relative;
 }
 
 * {
